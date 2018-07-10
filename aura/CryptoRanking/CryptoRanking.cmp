@@ -1,0 +1,145 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName" 
+                controller="CryptoRankingController"
+                access="global">
+    
+    <aura:attribute name="Coin_List" type="List" />
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="sObjectName" type="String" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}" />
+        
+    <lightning:card title="TOP 10 Cryptos">
+        
+        <aura:set attribute="actions">
+            <lightning:button variant="brand" label="Refresh" title="Refresh" onclick="{!c.doinit}" />
+        </aura:set>
+        
+        <p class="slds-p-horizontal_small">
+                
+            <lightning:layout class="slds-grid slds-wrap">
+                    
+                    <lightning:layoutItem flexibility="auto" padding="around-small" class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+                              
+                        
+                        <aura:if isTrue="{!v.isLoading}">           
+                            
+                            <div alternativeText="" class="slds-spinner slds-spinner_x-small slds-is-relative slds-spinner_brand">
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                            
+                            <aura:set attribute="else">
+                        
+                                <aura:if isTrue="{!!empty(v.Coin_List)}">
+                                    
+                                    <table  class="slds-table slds-max-medium-table_stacked-horizontal">
+                                        <thead >
+                                            <tr class="slds-text-title_caps">
+                                                <th scope="col">
+                                                    <div class="slds-truncate" title="Ranking">
+                                                        <lightning:icon size="xx-small" iconName="utility:topic2" alternativeText=""/>
+                                                    </div>
+                                                </th>
+                                                
+                                                <th scope="col">
+                                                    <div class="slds-truncate col" title="Coin">Coin
+                                                    </div>
+                                                </th>
+                                                
+                                                <th scope="col">
+                                                    <div class="slds-truncate col" title="USD Change Rate">USD
+                                                    </div>
+                                                </th>
+                                                
+                                                <aura:if isTrue="{!v.sObjectName == 'Opportunity'}">
+                                                    
+                                                    <th scope="col">
+                                                        <div class="slds-truncate col" title="Change Last 24">Opp Value
+                                                            <lightning:icon size="xx-small" iconName="utility:moneybag" alternativeText=""/>
+                                                        </div>
+                                                    </th>
+                                                
+                                                    <aura:set attribute="else">
+                                                       
+                                                        <th scope="col">
+                                                            <div class="slds-truncate col" title="Change Last 24">Changes(24H)
+                                                                <lightning:icon size="xx-small" iconName="utility:trending" alternativeText=""/>
+                                                            </div>
+                                                        </th>
+                                                        
+                                                    </aura:set>
+                                                    
+                                                </aura:if>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                            <aura:iteration items="{!v.Coin_List}" var="coin" indexVar="index">
+                                                
+                                                <tr class="slds-hint-parent">
+                                                    <td data-label="Ranking">
+                                                        <div class="slds-truncate">{!index +1}</div>
+                                                    </td>
+                                                    
+                                                    <td data-label="{!coin.Name}">
+                                                        <div class="slds-truncate"><b>{!coin.CryptoId}</b></div>
+                                                    </td>
+                                                    
+                                                    <td data-label="Rate">
+                                                        <div class="slds-truncate">{!coin.Rate}</div> 	
+                                                    </td>
+                                                    
+                                                    <aura:if isTrue="{!v.sObjectName == 'Opportunity'}">
+                                                    
+                                                        <td data-label="OppValue">
+                                                            <div class="slds-truncate">
+                                                                <ui:outputNumber value="{!coin.OppValue}"/>&nbsp;{!coin.CryptoId}
+                                                            </div> 	
+                                                        </td>
+                                                    
+                                                        <aura:set attribute="else">
+                                                           
+                                                            <td data-label="Change24H">
+                                                        
+                                                                <aura:if isTrue="{!coin.Change24 > 0}">
+                                                                        <div class="slds-truncate increase">{!coin.Change24}%</div>
+                                                                        
+                                                                        <aura:set attribute="else">
+                                                                            <div class="slds-truncate decrease">{!coin.Change24}%</div>
+                                                                        </aura:set>
+                                                                </aura:if>
+                                                                    
+                                                            </td>
+                                                                        
+                                                        </aura:set>
+                                                                
+                                                    </aura:if>
+                                                     
+                                                </tr>
+                                                
+                                            </aura:iteration>  
+                                            
+                                        </tbody>
+                                        
+                                    </table>
+                                                                
+                                </aura:if>
+                                
+                            </aura:set>
+                            
+                        </aura:if>
+                                
+                        
+                    </lightning:layoutItem>
+                
+                	<a href="https://coinmarketcap.com/" target="_blank">View more on CoinMarketCap!</a>
+      
+                </lightning:layout>
+                
+            </p>         
+        
+    </lightning:card>
+	
+</aura:component>

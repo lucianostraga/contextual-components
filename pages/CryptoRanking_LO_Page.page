@@ -1,0 +1,29 @@
+<apex:page sidebar="false" docType="html-5.0">
+    
+    <apex:slds />
+    
+    <apex:includeLightning />
+    <apex:includeScript value="/lightning/lightning.out.js" />
+    
+    <div id="lightning" />
+    
+    <div id="vf-spinner" style="height: 6rem;">
+        <div role="status" class="slds-spinner slds-spinner_medium">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+
+    <script>
+    $Lightning.use("c:CryptoRanking_LO_App", function() {
+        $Lightning.createComponent("c:CryptoRanking",
+                                   { label : "" },
+                                   "lightning",
+                                   function(cmp) {
+                                       	var el = document.getElementById("vf-spinner");
+									 	el.parentNode.removeChild(el);
+                                   });
+    });
+    </script>
+</apex:page>
